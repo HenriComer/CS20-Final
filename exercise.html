@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise - HECA Fitness</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="exercise.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="index.html"><img src="Images/hecafitness.png" alt="HECA Fitness Logo"></a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="meal-prep.html">Meal Prep</a></li>
+                <li><a href="exercise.html">Exercise</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="form-section">
+            <h1>Find Workout Tips Tailored to You</h1>
+            <form id="workout-form">
+                <label for="workout-type">Select Your Workout Goal:</label>
+                <select id="workout-type" name="workout-type" required>
+                    <option value="strength">Strength</option>
+                    <option value="endurance">Endurance</option>
+                    <option value="flexibility">Flexibility</option>
+                    <option value="cardio">Cardio</option>
+                </select>
+
+                <label for="intensity">Preferred Intensity:</label>
+                <select id="intensity" name="intensity" required>
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+
+                <button type="submit" class="cta-button">Get Workout Tips</button>
+            </form>
+            <div id="workout-tips"></div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 HECA Fitness. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

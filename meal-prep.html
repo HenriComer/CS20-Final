@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Prep - HECA Fitness</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="meal-prep.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="index.html"><img src="Images/hecafitness.png" alt="HECA Fitness Logo"></a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="meal-prep.html">Meal Prep</a></li>
+                <li><a href="exercise.html">Exercise</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="form-section">
+            <h1>Find Diet Tips Tailored to You</h1>
+            <form id="diet-form">
+                <label for="diet-type">Select Your Diet Type:</label>
+                <select id="diet-type" name="diet-type" required>
+                    <option value="vegan">Vegan</option>
+                    <option value="vegetarian">Vegetarian</option>
+                    <option value="keto">Keto</option>
+                    <option value="paleo">Paleo</option>
+                    <option value="gluten free">Gluten Free</option>
+                </select>
+
+                <label for="allergies">Any Allergies?</label>
+                <input type="text" id="allergies" name="allergies" placeholder="e.g., nuts, shellfish">
+
+                <button type="submit" class="cta-button">Get Diet Tips</button>
+            </form>
+            <div id="diet-tips"></div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 HECA Fitness. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
