@@ -18,6 +18,7 @@ mongoose.connect('mongodb://localhost:27017/hecaDB', {
 });
 
 const userSchema = new mongoose.Schema({
+    username: String,
     email: String,
     password: String
 });
@@ -49,10 +50,6 @@ app.get('/dashboard', (req, res) => {
         return res.redirect('/login');
     }
     res.send('Welcome to your dashboard!');
-});
-
-app.get('/register', (req, res) => {
-    res.sendFile(__dirname + '/register.html');
 });
 
 app.post('/register', async (req, res) => {
