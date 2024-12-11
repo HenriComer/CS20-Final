@@ -15,25 +15,25 @@ http.createServer(async function (req, res) {
     var urlObj = url.parse(req.url, true);
     var path = urlObj.pathname;
 
-    if (path === "/" || path === "/index.html") {
+    if (path === "/" || path.startsWith("/index.html")) {
         readHTMLFile(res, "index.html");
 
-    } else if (path === "/meal-prep.html") {
+    } else if (path.startsWith("/meal-prep.html")) {
         readHTMLFile(res, "meal-prep.html");
 
-    } else if (path === "/exercise.html") {
+    } else if (path.startsWith("/exercise.html")) {
         readHTMLFile(res, "exercise.html");
 
-    } else if (path === "/contact.html") {
+    } else if (path.startsWith("/contact.html")) {
         readHTMLFile(res, "contact.html");
 
-    } else if (path === "/profile.html") {
+    } else if (path.startsWith("/profile.html")) {
         readHTMLFile(res, "profile.html");
 
-    } else if (path === "/register.html") {
+    } else if (path.startsWith("/register.html")) {
         readHTMLFile(res, "register.html");
 
-    } else if (path === "/login.html") {
+    } else if (path.startsWith("/login.html")) {
         readHTMLFile(res, "login.html");
 
     } else if (path === "/styles.css") {
@@ -57,7 +57,10 @@ http.createServer(async function (req, res) {
     } else if (path === "/exercise.js") {
         readCodeFile(res, "exercise.js");
         
-    } else if (path.startsWith("/Images/")) {
+    } else if (path === "/login.js") {
+        readCodeFile(res, "login.js");
+        
+    }else if (path.startsWith("/Images/")) {
         fs.readFile("." + path, function (err, data) {
             if (err) {
                 res.writeHead(404, { 'Content-Type': 'text/plain' });
