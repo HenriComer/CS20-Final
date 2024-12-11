@@ -23,23 +23,17 @@
     </header>
     <main>
         <section class="form-section">
-            <h1>Find Diet Tips Tailored to You</h1>
-            <form id="diet-form">
-                <label for="diet-type">Select Your Diet Type:</label>
-                <select id="diet-type" name="diet-type" required>
-                    <option value="vegan">Vegan</option>
-                    <option value="vegetarian">Vegetarian</option>
-                    <option value="keto">Keto</option>
-                    <option value="paleo">Paleo</option>
-                    <option value="gluten free">Gluten Free</option>
+            <h1>Find Meal Options Tailored to You</h1>
+            <form id="meal-form">
+                <label for="meal-type">Select Your Meal Goal:</label>
+                <select id="meal-type" name="meal-type" required>
+                    <option value="highCarbs">High in Carbs</option>
+                    <option value="highProtein">High in Protein</option>
+                    <option value="lowCalories">Low in Calories</option>
                 </select>
-
-                <label for="allergies">Any Allergies?</label>
-                <input type="text" id="allergies" name="allergies" placeholder="e.g., nuts, shellfish">
-
-                <button type="submit" class="cta-button">Get Diet Tips</button>
+                <button type="submit" class="cta-button">Get Meal Options</button>
             </form>
-            <div id="diet-tips"></div>
+            <div id="meal-tips"></div>
         </section>
     </main>
     <footer>
