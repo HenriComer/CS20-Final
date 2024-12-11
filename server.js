@@ -1,77 +1,212 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-const bodyParser = require('body-parser');
-const session = require('express-session');
+// Packages/Dependencies
+var http = require('http');
+var url = require('url');
+var qs = require('querystring');
+var fs = require('fs');
+const MongoClient = require('mongodb').MongoClient;
+// var port = process.env.PORT || 3000;
+var port = 8080;
 
-const app = express();
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({
-    secret: 'hecaSecretKey',
-    resave: false,
-    saveUninitialized: false
-}));
+// MongoDB connection URI
+const uri = 'mongodb+srv://connorg2404:Tusd2026@cs20-hw13.be1nl.mongodb.net/?retryWrites=true&w=majority&appName=CS20-HW13';
 
-mongoose.connect('mongodb://localhost:27017/hecaDB', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
+// Create the server
+http.createServer(async function (req, res) {
+    var urlObj = url.parse(req.url, true);
+    var path = urlObj.pathname;
 
-const userSchema = new mongoose.Schema({
-    username: String,
-    email: String,
-    password: String
-});
+    if (path === "/" || path.startsWith("/index.html")) {
+        readHTMLFile(res, "index.html");
 
-const User = mongoose.model('User', userSchema);
+    } else if (path.startsWith("/meal-prep.html")) {
+        readHTMLFile(res, "meal-prep.html");
 
-app.get('/login', (req, res) => {
-    res.sendFile(__dirname + '/login.html');
-});
+    } else if (path.startsWith("/exercise.html")) {
+        readHTMLFile(res, "exercise.html");
 
-app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    } else if (path.startsWith("/contact.html")) {
+        readHTMLFile(res, "contact.html");
 
-    if (user && await bcrypt.compare(password, user.password)) {
-        req.session.user = user;
-        res.redirect('/dashboard');
+    } else if (path.startsWith("/profile.html")) {
+        readHTMLFile(res, "profile.html");
+
+    } else if (path.startsWith("/register.html")) {
+        readHTMLFile(res, "register.html");
+
+    } else if (path === "/styles.css") {
+        fs.readFile("styles.css", function (err, data) {
+            if (err) {
+                res.writeHead(404, { 'Content-Type': 'text/plain' });
+                res.write("CSS file not found.");
+                res.end();
+                return;
+            }
+            res.writeHead(200, { 'Content-Type': 'text/css' });
+            res.write(data);
+            res.end();
+        });
+    } else if (path === "/meal-prep.js") {
+        readCodeFile(res, "meal-prep.js");
+
+    } else if (path === "/contact.js") {
+        readCodeFile(res, "contact.js");
+
+    } else if (path === "/registerAccount") {
+        var query = urlObj.query;
+        var newEmail = query.email;
+        var userName = query.name;
+
+        const client = new MongoClient(uri);
+        try {
+            await client.connect();
+            const db = client.db('HECA');
+            const collection = db.collection('users');
+
+            let dbQuery = {email: newEmail};
+            console.log(newEmail);
+            console.log(userName);
+
+            const results = await collection.find(dbQuery).toArray();
+            if (results.length === 1) {
+                readHTMLFile(res, "wrongEmail.html");
+            } else {
+                await db.collection('users').insertOne({name: userName, email: newEmail, lastWorkout: "None", lastWorkoutDate: "None", lastMeal: "None", lastMealDate: "None"});
+                readHTMLFile(res, "index.html");
+            }
+        } catch (error) {
+            console.error('Error processing request:', error.message);
+        // Close the client (database) once we're done
+        } finally {
+            client.close();
+        }
+    } else if (path === "/generateWorkout") {
+        readHTMLFile(res, "exercise.html");
+        var query = urlObj.query;
+        var userEmail = query.email;
+        var muscle = query.muscle;
+
+        const currDate = new Date();
+        const day = String(currDate.getDate()).padStart(2, '0');
+        const month = String(currDate.getMonth() + 1).padStart(2, '0');
+        const year = String(currDate.getFullYear()).slice(-2);
+
+        const formattedDate = `${month}/${day}/${year}`;
+
+        const client = new MongoClient(uri);
+        try {
+            await client.connect();
+            const db = client.db('HECA');
+            const collection = db.collection('users');
+
+            let dbQuery = {email: userEmail};
+            console.log(userEmail);
+            console.log(muscle);
+
+            const results = await collection.find(dbQuery).toArray();
+            if (results.length === 0) {
+                console.log("Please register");
+            } else {
+                await db.collection('users').updateOne({email: userEmail}, {$set: { lastWorkout: muscle, lastWorkoutDate: formattedDate } });
+                // API URL with the user's selection
+                const apiUrl = `https://api.api-ninjas.com/v1/exercises?muscle=${muscle}`;
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'GET',
+                        headers: {
+                            'X-Api-Key': 'uJ+0/vWSN0uVmLutNI6F7w==JXyf1UVpze0BshDA',
+                        },
+                    });
+
+                    if (!response.ok) throw new Error('Failed to fetch workout data.');
+
+                    const data = await response.json();
+
+                    while (data.length < 3) {
+                        data.push({
+                            name: 'Sample Exercise',
+                            muscle: 'N/A',
+                            difficulty: 'N/A',
+                            instructions: 'N/A',
+                        });
+                    }
+
+                    // Create structured HTML output
+                    const workoutTips = data.map(exercise => `
+                        <div class="result-item">
+                            <h3>${exercise.name}</h3>
+                            <p><strong>Muscle:</strong> ${exercise.muscle}</p>
+                            <p><strong>Difficulty:</strong> ${exercise.difficulty}</p>
+                            <p><strong>Instructions:</strong> ${exercise.instructions}</p>
+                        </div>
+                    `).join('');
+
+                    res.write(`
+                        <h2>Your Workout Options:</h2>
+                        <div class="results-container">
+                            ${workoutTips}
+                        </div>
+                    `);
+                } catch (error) {
+                    res.write(`
+                        <p style="color: red;">Error: Unable to fetch workout data. Please try again later.</p>
+                    `);
+                    console.error(error);
+                }
+            }
+        // Catch any error in processing a request
+        } catch (error) {
+            console.error('Error processing request:', error.message);
+        // Close the client (database) once we're done
+        } finally {
+            client.close();
+        }
+    } else if (path.startsWith("/Images/")) {
+        fs.readFile("." + path, function (err, data) {
+            if (err) {
+                res.writeHead(404, { 'Content-Type': 'text/plain' });
+                res.write("Image file not found.");
+                res.end();
+                return;
+            }
+            res.writeHead(200, { 'Content-Type': 'image/png' });
+            res.write(data);
+            res.end();
+        });
     } else {
-        res.send('Invalid email or password.');
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.write("Page not found.");
+        res.end();
     }
-});
+}).listen(port);
 
-app.get('/register', (req, res) => {
-    res.sendFile(__dirname + '/register.html');
-});
+function readHTMLFile(res, fileName) {
+    fs.readFile(fileName, function (err, data) {
+        if (err) {
+            res.writeHead(500, { 'Content-Type': 'text/plain' });
+            res.write("Error loading the file.");
+            res.end();
+            return;
+        }
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.write(data);
+        res.end();
+    }); 
+}
 
-app.get('/dashboard', (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/login');
-    }
-    res.send('Welcome to your dashboard!');
-});
-
-app.post('/register', async (req, res) => {
-    const { name, email, password } = req.body;
-
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-        return res.send('Email already in use. Please try logging in.');
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({
-        name,
-        email,
-        password: hashedPassword
+function readCodeFile(res, fileName) {
+    fs.readFile(fileName, function (err, data) {
+        if (err) {
+            res.writeHead(404, { 'Content-Type': 'text/plain' });
+            res.write("JavaScript file not found.");
+            res.end();
+            return;
+        }
+        res.writeHead(200, { 'Content-Type': 'application/javascript' });
+        res.write(data);
+        res.end();
     });
+}
 
-    await newUser.save();
-    res.redirect('/login');
-});
+console.log("Server running on localhost:" + port);
 
-
-app.listen(3000, () => {
-    console.log('Server is running on http://localhost:3000');
-});

@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exercise - HECA Fitness</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="exercise.js" defer></script>
 </head>
 <body>
     <header>
@@ -24,7 +23,9 @@
     <main>
         <section class="form-section">
             <h1>Find Workout Tips Tailored to You</h1>
-            <form id="workout-form">
+            <form id="workout-form" method="GET" action="/generateWorkout">
+                <label>Input Your Email:</label>
+                <input type="email" id="email" name="email" required>
                 <label for="muscle">Select Muscle Group:</label>
                 <select id="muscle" name="muscle" required>
                     <option value="abdominals">Abdominals</option>

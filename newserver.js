@@ -3,7 +3,6 @@ var http = require('http');
 var url = require('url');
 var qs = require('querystring');
 var fs = require('fs');
-const MongoClient = require('mongodb').MongoClient;
 // var port = process.env.PORT || 3000;
 var port = 8080;
 
@@ -33,9 +32,6 @@ http.createServer(async function (req, res) {
     } else if (path.startsWith("/register.html")) {
         readHTMLFile(res, "register.html");
 
-    } else if (path.startsWith("/login.html")) {
-        readHTMLFile(res, "login.html");
-
     } else if (path === "/styles.css") {
         fs.readFile("styles.css", function (err, data) {
             if (err) {
@@ -57,10 +53,7 @@ http.createServer(async function (req, res) {
     } else if (path === "/exercise.js") {
         readCodeFile(res, "exercise.js");
         
-    } else if (path === "/login.js") {
-        readCodeFile(res, "login.js");
-        
-    }else if (path.startsWith("/Images/")) {
+    } else if (path.startsWith("/Images/")) {
         fs.readFile("." + path, function (err, data) {
             if (err) {
                 res.writeHead(404, { 'Content-Type': 'text/plain' });
