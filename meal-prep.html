@@ -24,11 +24,11 @@
     <main>
         <section class="form-section">
             <h1>Find Meal Options Tailored to You</h1>
-            <form id="meal-form">
+            <form id="meal-form" method="GET" action="/generateMeal">
                 <label>Input Your Email:</label>
                 <input type="email" id="email" name="email" required>
-                <label for="meal-type">Select Your Meal Goal:</label>
-                <select id="meal-type" name="meal-type" required>
+                <label for="mealType">Select Your Meal Goal:</label>
+                <select id="mealType" name="mealType" required>
                     <option value="highCarbs">High in Carbs</option>
                     <option value="highProtein">High in Protein</option>
                     <option value="lowCalories">Low in Calories</option>

@@ -22,51 +22,14 @@
     </header>
     <main>
         <section class="profile">
+            <h1>Your Profile</h1>
             <section class="form-section">
-                <form id="workout-form" method="GET" action="/generateWorkout">
+                <form id="workout-form" method="GET" action="/showProfile">
                     <label>Input Your Email:</label>
                     <input type="email" id="email" name="email" required>
-                    <a href="profile.html" class="cta-button">Update Diet</a>
+                    <button type="submit" class="cta-button" style="background-color: #d72638">Show Profile</button>
                 </form>
             </section>
-
-            <h1>Your Profile</h1>
-            <form class="profile-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="username">Username:</label>
-                        <input type="text" id="username" value="[User's Name]" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" id="email" value="[User's Email]" readonly>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="lastDiet">Last Diet Type:</label>
-                        <input type="text" id="lastDiet" value="[Diet Type]" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="dietDate">Date of Last Diet Request:</label>
-                        <input type="date" id="dietDate" value="[Diet Date]" readonly>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="lastExercise">Last Exercise Type:</label>
-                        <input type="text" id="lastExercise" value="[Exercise Type]" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="exerciseDate">Date of Last Exercise Request:</label>
-                        <input type="date" id="exerciseDate" value="[Exercise Date]" readonly>
-                    </div>
-                </div>
-            </form>
-            <div class="button-container">
-                <a href="meal-prep.html" class="cta-button">Update Diet</a>
-                <a href="exercise.html" class="cta-button">Update Exercise</a>
-            </div>
         </section>
     </main>
     <footer>
