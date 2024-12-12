@@ -4,8 +4,8 @@ var url = require('url');
 var qs = require('querystring');
 var fs = require('fs');
 const MongoClient = require('mongodb').MongoClient;
-var port = process.env.PORT || 3000;
-// var port = 8080;
+// var port = process.env.PORT || 3000;
+var port = 8080;
 
 // MongoDB connection URI
 const uri = 'mongodb+srv://connorg2404:Tusd2026@cs20-hw13.be1nl.mongodb.net/?retryWrites=true&w=majority&appName=CS20-HW13';
