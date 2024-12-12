@@ -3,7 +3,6 @@ var http = require('http');
 var url = require('url');
 var qs = require('querystring');
 var fs = require('fs');
-var fetch = require('node-fetch');
 const MongoClient = require('mongodb').MongoClient;
 var port = process.env.PORT || 3000;
 // var port = 8080;
